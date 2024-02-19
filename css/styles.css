@@ -6704,6 +6704,7 @@ textarea.form-control-lg {
 .link-secondary {
   color: #6c757d !important;
 }
+
 .link-secondary:hover, .link-secondary:focus {
   color: #565e64 !important;
 }

@@ -12,9 +12,13 @@
 }
 
 .btn-primary {
-    color: var(--brand-primary);
-    background-color: var(--brand-secondary) !important;
-    border: var(--bs-btn-border-width) solid var(--brand-secondary);
+    color: var(--brand-secondary);
+    background-color: var(--brand-primary) !important;
+    border: var(--bs-btn-border-width) solid var(--brand-primary);
+}
+
+.link-secondary {
+    color: var(--brand-secondary) !important;
 }
 
 .mx-6 {
@@ -48,6 +52,14 @@
 
 .text-brand-secondary {
     color: var(--brand-secondary);
+}
+
+.text-left {
+    text-align: left !important;
+}
+  
+.text-right {
+    text-align: right !important;
 }
 
 @media (max-width: 575.98px) {
