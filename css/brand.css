@@ -1,0 +1,70 @@
+:root {
+    --brand-primary: #002c6a;
+    --brand-secondary: #f8d99b;
+}
+
+.bg-brand-primary {
+    background-color: var(--brand-primary) !important;
+}
+
+.bg-brand-secondary {
+    background-color: var(--brand-secondary) !important;
+}
+
+.btn-primary {
+    color: var(--brand-secondary);
+    background-color: var(--brand-primary) !important;
+    border: var(--bs-btn-border-width) solid var(--brand-primary);
+}
+
+.link-secondary {
+    color: var(--brand-secondary) !important;
+}
+
+.mx-6 {
+    margin-right: 3.5rem !important;
+    margin-left: 3.5rem !important;
+}
+
+.mx-7 {
+    margin-right: 4rem !important;
+    margin-left: 4rem !important;
+}
+
+.mx-8 {
+    margin-right: 4.5rem !important;
+    margin-left: 4.5rem !important;
+}
+
+.mx-9 {
+    margin-right: 5rem !important;
+    margin-left: 5rem !important;
+}
+
+.mx-10 {
+    margin-right: 6rem !important;
+    margin-left: 6rem !important;
+}
+
+.text-brand-primary {
+    color: var(--brand-primary);
+}
+
+.text-brand-secondary {
+    color: var(--brand-secondary);
+}
+
+.text-left {
+    text-align: left !important;
+}
+  
+.text-right {
+    text-align: right !important;
+}
+
+@media (max-width: 575.98px) {
+    .mx-10 {
+        margin-right: auto !important;
+        margin-left: auto !important;
+    }
+}
