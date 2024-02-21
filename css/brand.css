@@ -1,6 +1,8 @@
 :root {
     --brand-primary: #002c6a;
     --brand-secondary: #f8d99b;
+    --brand-primary-rgb: rgba(0,44,106, 1);
+    --brand-white-rgb: rgba(255, 255, 255, 0.20);
 }
 
 #newsletter iframe {
@@ -21,6 +23,12 @@ form#contact-form .form-control {
 
 .bg-brand-secondary {
     background-color: var(--brand-secondary) !important;
+}
+
+.bg-brand-gradient {
+    background: linear-gradient(0, var(--brand-white-rgb), var(--brand-primary-rgb));
+    background-position: center;
+    background-size: cover;
 }
 
 .btn-primary {
