@@ -3,6 +3,18 @@
     --brand-secondary: #f8d99b;
 }
 
+#newsletter iframe {
+    width: 50%;
+}
+
+#newsletter iframe .kdtdey {
+    border: 2px solid rgb(206,212,218) !important;
+}
+
+form#contact-form .form-control {
+    border: 2px solid rgb(0, 44, 106);
+}
+
 .bg-brand-primary {
     background-color: var(--brand-primary) !important;
 }
@@ -66,5 +78,9 @@
     .mx-10 {
         margin-right: auto !important;
         margin-left: auto !important;
+    }
+
+    #newsletter iframe {
+        width: 100%;
     }
 }
