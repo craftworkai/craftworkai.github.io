@@ -2,7 +2,13 @@
     --brand-primary: #002c6a;
     --brand-secondary: #f8d99b;
     --brand-primary-rgb: rgba(0,44,106, 1);
+    --brand-primary-liter-rgb: rgb(0, 69, 167, 0.20);
     --brand-white-rgb: rgba(255, 255, 255, 0.20);
+}
+
+.navbar-brand img {
+    height: 40px;
+    width: auto;
 }
 
 #newsletter iframe {
@@ -26,8 +32,9 @@ form#contact-form .form-control {
 }
 
 .bg-brand-gradient {
-    background: linear-gradient(0, var(--brand-white-rgb), var(--brand-primary-rgb));
+    background-image: linear-gradient(0, var(--brand-primary-liter-rgb), var(--brand-primary-rgb)), url("../assets/hero-background.jpeg");
     background-position: center;
+    background-repeat: no-repeat;
     background-size: cover;
 }
 

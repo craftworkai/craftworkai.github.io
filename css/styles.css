@@ -10829,11 +10829,12 @@ textarea.form-control-lg {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 4rem;
-  width: 4rem;
+  height: 3.5rem;
+  width: 3.5rem;
   font-size: 2rem;
 }
 
 .feature i {
+  font-size: 0.75em;
   text-decoration-color: rgb(248, 217, 155);
 }
