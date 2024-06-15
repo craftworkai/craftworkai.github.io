@@ -11,6 +11,10 @@
     width: auto;
 }
 
+.hero {
+    text-shadow: 0 0 15px black;
+}
+
 #newsletter iframe {
     width: 50%;
 }
