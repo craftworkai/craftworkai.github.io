@@ -1,0 +1,137 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><link rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v4.15.10"><title>Craftwork</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Oswald:wght@200..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="/_astro/about.d7tg_F6b.css"></head><body class="min-h-screen flex flex-col justify-between"> <header class="bg-brand-blue text-brand-blue-medium-lite"> <div class="grid grid-cols-2 left-0 mx-auto max-w-7xl py-2"> <div class="flex items-center max-w-7xl"> <h1 class="font-bold font-roboto uppercase"> <a class="inline-block" href="/"><img alt="Craftwork" class="inline-block size-10" src="/images/logo.png"> Craftwork</a> </h1> </div> <div class="burger hidden sm:inline-block"> <div class="bar1 h-1 w-7 my-1.5 bg-brand-blue-medium-lite duration-300"></div> <div class="bar2 h-1 w-7 my-1.5 bg-brand-blue-medium-lite"></div> <div class="bar3 h-1 w-7 my-1.5 bg-brand-blue-medium-lite duration-300"></div> </div> <div class="max-w-7xl float-right place-content-end"> <div class="mx-auto float-end"> <nav> <ul class="links flex font-bold font-spacemono text-sm uppercase"> <li class="p-4"> <a class="hover:text-brand-gold hover:underline" href="/services"> Services </a> </li> <li class="p-4"> <a class="hover:text-brand-gold hover:underline" href="/industries"> Industries </a> </li> <li class="p-4"> <a class="hover:text-brand-gold hover:underline" href="/resources"> Resources </a> </li> <li class="p-4"> <a class="hover:text-brand-gold hover:underline" href="/articles"> Articles </a> </li> <li class="p-4"> <a class="hover:text-brand-gold hover:underline" href="/about"> About </a> </li> <li class="p-4 pr-0"> <a class="bg-brand-gold hover:bg-brand-blue-medium-lite font-bold px-3 py-2 rounded-md text-brand-blue" href="/contact"> Contact </a> </li> </ul> </nav> </div> </div> </div> </header> <main class="flex-grow">   <div class="max-w-4xl mx-auto"> <div class="py-12 sm:px-4"> <p class="mb-4"><a class="font-medium hover:text-gray-500 text-sm text-gray-400 uppercase" href="/articles">&laquo; Articles</a></p> <h2 class="font-playfair leading-normal mb-2 text-4xl text-brand-blue">Provisioning an EKS Cluster with Terraform: A Step-by-Step Guide</h2> <p class="mb-8 text-gray-500 text-sm">10/02/2024 | Lark Mullins</p> <img class="mb-8 rounded-md" src="/images/articles/construction-site-rebar-field.jpg"> <article class="prose max-w-none"> <p>Amazon Elastic Kubernetes Service (EKS) is a fully managed Kubernetes service provided by AWS, making it easier to run Kubernetes without needing to manage the control plane yourself. Terraform, an Infrastructure as Code (IaC) tool, enables the automation of cloud infrastructure provisioning, including EKS clusters. By using Terraform to provision an EKS cluster, you can create, manage, and scale a Kubernetes environment in a consistent and repeatable way.</p>
+<p>In this guide, we’ll walk through the steps to provision an EKS cluster using Terraform, from setting up your environment to deploying the cluster itself.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>Before we begin, make sure you have the following in place:</p>
+<ol>
+<li><strong>AWS Account</strong> – Ensure you have an active AWS account with appropriate IAM permissions to provision EKS resources.</li>
+<li><strong>Terraform Installed</strong> – If you don’t already have Terraform installed, you can <a href="https://www.terraform.io/downloads.html">download it here</a>.</li>
+<li><strong>AWS CLI Configured</strong> – Set up the AWS CLI with credentials by running <code>aws configure</code>.</li>
+<li><strong>kubectl Installed</strong> – <code>kubectl</code> is required for interacting with your Kubernetes cluster. You can download it <a href="https://kubernetes.io/docs/tasks/tools/">here</a>.</li>
+</ol>
+<h2 id="step-1-setup-the-directory-and-files">Step 1: Setup the Directory and Files</h2>
+<p>Create a directory for your Terraform files:</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash"><span class="token function">mkdir</span> eks-cluster
+<span class="token builtin class-name">cd</span> eks-cluster
+</code></pre>
+<p>Inside the directory, create the following files:</p>
+<ul>
+<li><code>main.tf</code>: For defining the core EKS resources.</li>
+<li><code>outputs.tf</code>: For outputting necessary information after the cluster is created.</li>
+<li><code>variables.tf</code>: To store variables for reusability.</li>
+</ul>
+<h2 id="step-2-define-aws-provider-and-vpc">Step 2: Define AWS Provider and VPC</h2>
+<h3 id="provider">Provider</h3>
+<p>In the <code>main.tf</code> file, specify the AWS provider. This tells Terraform to use AWS as the cloud platform.</p>
+<pre class="language-hcl" data-language="hcl"><code is:raw="" class="language-hcl"><span class="token keyword">provider<span class="token type variable"> "aws" </span></span><span class="token punctuation">{</span>
+  <span class="token property">region</span> <span class="token punctuation">=</span> var.aws_region
+<span class="token punctuation">}</span>
+</code></pre>
+<h3 id="vpc-and-subnets">VPC and Subnets</h3>
+<p>EKS requires a VPC with subnets for worker nodes to run. You can either create a new VPC or use an existing one. Here’s how to provision a new VPC:</p>
+<pre class="language-hcl" data-language="hcl"><code is:raw="" class="language-hcl"><span class="token keyword">module<span class="token type variable"> "vpc" </span></span><span class="token punctuation">{</span>
+  <span class="token property">source</span>  <span class="token punctuation">=</span> <span class="token string">"terraform-aws-modules/vpc/aws"</span>
+  <span class="token property">version</span> <span class="token punctuation">=</span> <span class="token string">"3.14.0"</span>
+
+  <span class="token property">name</span> <span class="token punctuation">=</span> <span class="token string">"eks-vpc"</span>
+  <span class="token property">cidr</span> <span class="token punctuation">=</span> <span class="token string">"10.0.0.0/16"</span>
+
+  <span class="token property">azs</span>             <span class="token punctuation">=</span> <span class="token punctuation">[</span><span class="token string">"us-west-2a"</span>, <span class="token string">"us-west-2b"</span>, <span class="token string">"us-west-2c"</span><span class="token punctuation">]</span>
+  <span class="token property">public_subnets</span>  <span class="token punctuation">=</span> <span class="token punctuation">[</span><span class="token string">"10.0.1.0/24"</span>, <span class="token string">"10.0.2.0/24"</span>, <span class="token string">"10.0.3.0/24"</span><span class="token punctuation">]</span>
+  <span class="token property">private_subnets</span> <span class="token punctuation">=</span> <span class="token punctuation">[</span><span class="token string">"10.0.4.0/24"</span>, <span class="token string">"10.0.5.0/24"</span>, <span class="token string">"10.0.6.0/24"</span><span class="token punctuation">]</span>
+
+  <span class="token property">enable_nat_gateway</span> <span class="token punctuation">=</span> <span class="token boolean">true</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>The above module provisions a VPC with both public and private subnets, as well as a NAT gateway, which is needed for worker nodes in private subnets.</p>
+<h2 id="step-3-provision-the-eks-cluster">Step 3: Provision the EKS Cluster</h2>
+<p>Now, we’ll define the EKS cluster. Still in <code>main.tf</code>, add the following:</p>
+<pre class="language-hcl" data-language="hcl"><code is:raw="" class="language-hcl"><span class="token keyword">module<span class="token type variable"> "eks" </span></span><span class="token punctuation">{</span>
+  <span class="token property">source</span>          <span class="token punctuation">=</span> <span class="token string">"terraform-aws-modules/eks/aws"</span>
+  <span class="token property">version</span>         <span class="token punctuation">=</span> <span class="token string">"19.9.0"</span>
+
+  <span class="token property">cluster_name</span>    <span class="token punctuation">=</span> var.cluster_name
+  <span class="token property">cluster_version</span> <span class="token punctuation">=</span> <span class="token string">"1.27"</span>
+  <span class="token property">subnets</span>         <span class="token punctuation">=</span> module.vpc.private_subnets
+  <span class="token property">vpc_id</span>          <span class="token punctuation">=</span> module.vpc.vpc_id
+
+  <span class="token property">node_groups</span> <span class="token punctuation">=</span> <span class="token punctuation">{</span>
+    <span class="token property">eks_nodes</span> <span class="token punctuation">=</span> <span class="token punctuation">{</span>
+      <span class="token property">desired_capacity</span> <span class="token punctuation">=</span> <span class="token number">2</span>
+      <span class="token property">max_capacity</span>     <span class="token punctuation">=</span> <span class="token number">3</span>
+      <span class="token property">min_capacity</span>     <span class="token punctuation">=</span> <span class="token number">1</span>
+
+      <span class="token property">instance_type</span> <span class="token punctuation">=</span> <span class="token string">"t3.medium"</span>
+      <span class="token property">key_name</span>      <span class="token punctuation">=</span> var.key_name
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token property">manage_aws_auth</span> <span class="token punctuation">=</span> <span class="token boolean">true</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>This block provisions the EKS cluster along with an autoscaling node group. The <code>node_groups</code> attribute defines a worker node group with a minimum of 1 node, a desired capacity of 2, and a maximum of 3 nodes. The <code>t3.medium</code> instance type is used for the worker nodes, but you can adjust it based on your requirements.</p>
+<h3 id="variables">Variables</h3>
+<p>In the <code>variables.tf</code> file, define the variables used in <code>main.tf</code>:</p>
+<pre class="language-hcl" data-language="hcl"><code is:raw="" class="language-hcl"><span class="token keyword">variable<span class="token type variable"> "aws_region" </span></span><span class="token punctuation">{</span>
+  <span class="token property">default</span> <span class="token punctuation">=</span> <span class="token string">"us-west-2"</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">variable<span class="token type variable"> "cluster_name" </span></span><span class="token punctuation">{</span>
+  <span class="token property">default</span> <span class="token punctuation">=</span> <span class="token string">"my-eks-cluster"</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">variable<span class="token type variable"> "key_name" </span></span><span class="token punctuation">{</span>
+  <span class="token property">description</span> <span class="token punctuation">=</span> <span class="token string">"SSH key pair name"</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h3 id="outputs">Outputs</h3>
+<p>In the <code>outputs.tf</code> file, specify the outputs that will be useful after the cluster is created:</p>
+<pre class="language-hcl" data-language="hcl"><code is:raw="" class="language-hcl"><span class="token keyword">output<span class="token type variable"> "cluster_endpoint" </span></span><span class="token punctuation">{</span>
+  <span class="token property">description</span> <span class="token punctuation">=</span> <span class="token string">"EKS cluster endpoint"</span>
+  <span class="token property">value</span>       <span class="token punctuation">=</span> module.eks.cluster_endpoint
+<span class="token punctuation">}</span>
+
+<span class="token keyword">output<span class="token type variable"> "cluster_security_group_id" </span></span><span class="token punctuation">{</span>
+  <span class="token property">description</span> <span class="token punctuation">=</span> <span class="token string">"EKS cluster security group ID"</span>
+  <span class="token property">value</span>       <span class="token punctuation">=</span> module.eks.cluster_security_group_id
+<span class="token punctuation">}</span>
+</code></pre>
+<p>These outputs will give you the cluster’s API endpoint and security group ID, which can be useful for future integrations and configurations.</p>
+<h2 id="step-4-initialize-and-apply-terraform">Step 4: Initialize and Apply Terraform</h2>
+<p>Once you have defined all your configurations, run the following commands:</p>
+<ol>
+<li>
+<p><strong>Initialize the project</strong>:</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">terraform init
+</code></pre>
+<p>This will download the necessary provider plugins and modules.</p>
+</li>
+<li>
+<p><strong>Validate the configuration</strong>:</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">terraform validate
+</code></pre>
+<p>This step ensures your configuration files are valid.</p>
+</li>
+<li>
+<p><strong>Apply the configuration</strong>:</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">terraform apply
+</code></pre>
+<p>Terraform will prompt you to confirm the changes it plans to make. Type <code>yes</code> to proceed. The process may take several minutes as Terraform provisions the VPC, subnets, EKS cluster, and worker nodes.</p>
+</li>
+</ol>
+<h2 id="step-5-configure-kubectl-to-access-the-cluster">Step 5: Configure kubectl to Access the Cluster</h2>
+<p>Once the EKS cluster is provisioned, you need to configure <code>kubectl</code> to interact with the cluster. You can do this by running the following command:</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">aws eks <span class="token parameter variable">--region</span> us-west-2 update-kubeconfig <span class="token parameter variable">--name</span> my-eks-cluster
+</code></pre>
+<p>Replace <code>us-west-2</code> and <code>my-eks-cluster</code> with your AWS region and cluster name, respectively. This command sets up your kubeconfig to access the EKS cluster.</p>
+<p>Now, test the setup by running:</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">kubectl get svc
+</code></pre>
+<p>You should see the Kubernetes services running within your EKS cluster.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>In this post, we walked through how to provision an Amazon EKS cluster using Terraform. By leveraging Terraform, we not only automated the process of creating the EKS cluster, but we also made the configuration reusable and consistent for future deployments. With your EKS cluster up and running, you can start deploying your containerized applications and take full advantage of the Kubernetes ecosystem on AWS.</p>
+<p>Happy provisioning!</p> </article> </div> </div> <div class="py-12 bg-brand-blue-lite bg-center bg-auto"> <div class="max-w-4xl mx-auto text-center"> <h3 class="font-playfair font-medium mb-2 text-3xl text-brand-blue">Sign Up for Fieldcraft</h3> <p class="mb-6 text-gray-500">Fieldcraft is Craftwork's weekly newsletter providing industry insights and exclusive updates.</p> </div> <div class="max-w-4xl mx-auto"> <div class="px-48 sm:px-4"> <iframe src="https://embeds.beehiiv.com/c35a0a91-7cb4-49a4-a702-820c008eea27?slim=true" data-test-id="beehiiv-embed" height="52" class="w-full" frameborder="0" scrolling="no" style="margin: 0; border-radius: 0px !important; background-color: transparent;"></iframe> </div> <!-- <form>
+            <div class="flex flex-row justify-center">
+                <input class="mt-1 block w-1/2 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400" placeholder="Email" type="email" />
+                <button class="bg-brand-blue hover:bg-brand-blue-medium-lite font-roboto hover:text-brand-blue px-3 py-2 rounded-md text-brand-gold" id="submitButton" type="submit">Sign Up</button>
+            </div>
+        </form> --> </div> </div>   </main> <footer class="py-12 bg-brand-blue bg-center bg-auto font-roboto text-brand-blue-medium-lite"> <div class="max-w-4xl mx-auto"> <div class="grid grid-cols-2 gap-16 sm:grid-cols-1 sm:gap-4"> <div class="sm:block sm:text-center"> <p>&copy; 2024 Craftwork Systems, LLC</p> </div> <div class="text-right sm:content-evenly sm:text-center"> <a class="inline-block mr-1" href="https://linkedin.com/company/craftworkai" target="_blank"> <svg class="fill-brand-blue-medium-lite hover:fill-brand-gold" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 50 50"> <path d="M41,4H9C6.24,4,4,6.24,4,9v32c0,2.76,2.24,5,5,5h32c2.76,0,5-2.24,5-5V9C46,6.24,43.76,4,41,4z M17,20v19h-6V20H17z M11,14.47c0-1.4,1.2-2.47,3-2.47s2.93,1.07,3,2.47c0,1.4-1.12,2.53-3,2.53C12.2,17,11,15.87,11,14.47z M39,39h-6c0,0,0-9.26,0-10 c0-2-1-4-3.5-4.04h-0.08C27,24.96,26,27.02,26,29c0,0.91,0,10,0,10h-6V20h6v2.56c0,0,1.93-2.56,5.81-2.56 c3.97,0,7.19,2.73,7.19,8.26V39z"></path> </svg> </a> <a class="inline-block mr-1" href="https://x.com/craftworkai" target="_blank"> <svg class="fill-brand-blue-medium-lite hover:fill-brand-gold" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 50 50"> <path d="M 11 4 C 7.134 4 4 7.134 4 11 L 4 39 C 4 42.866 7.134 46 11 46 L 39 46 C 42.866 46 46 42.866 46 39 L 46 11 C 46 7.134 42.866 4 39 4 L 11 4 z M 13.085938 13 L 21.023438 13 L 26.660156 21.009766 L 33.5 13 L 36 13 L 27.789062 22.613281 L 37.914062 37 L 29.978516 37 L 23.4375 27.707031 L 15.5 37 L 13 37 L 22.308594 26.103516 L 13.085938 13 z M 16.914062 15 L 31.021484 35 L 34.085938 35 L 19.978516 15 L 16.914062 15 z"></path> </svg> </a> <a class="inline-block mr-1" href="https://www.instagram.com/craftworkai/" target="_blank"> <svg class="fill-brand-blue-medium-lite hover:fill-brand-gold" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 50 50"> <path d="M 16 3 C 8.83 3 3 8.83 3 16 L 3 34 C 3 41.17 8.83 47 16 47 L 34 47 C 41.17 47 47 41.17 47 34 L 47 16 C 47 8.83 41.17 3 34 3 L 16 3 z M 37 11 C 38.1 11 39 11.9 39 13 C 39 14.1 38.1 15 37 15 C 35.9 15 35 14.1 35 13 C 35 11.9 35.9 11 37 11 z M 25 14 C 31.07 14 36 18.93 36 25 C 36 31.07 31.07 36 25 36 C 18.93 36 14 31.07 14 25 C 14 18.93 18.93 14 25 14 z M 25 16 C 20.04 16 16 20.04 16 25 C 16 29.96 20.04 34 25 34 C 29.96 34 34 29.96 34 25 C 34 20.04 29.96 16 25 16 z"></path> </svg> </a> <a class="inline-block mr-1" href="https://www.facebook.com/profile.php?id=61556705353308" target="_blank"> <svg class="fill-brand-blue-medium-lite hover:fill-brand-gold" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 50 50"> <path d="M41,4H9C6.24,4,4,6.24,4,9v32c0,2.76,2.24,5,5,5h32c2.76,0,5-2.24,5-5V9C46,6.24,43.76,4,41,4z M37,19h-2c-2.14,0-3,0.5-3,2 v3h5l-1,5h-4v15h-5V29h-4v-5h4v-3c0-4,2-7,6-7c2.9,0,4,1,4,1V19z"></path> </svg> </a> </div> </div> </div> </footer> </body></html>
