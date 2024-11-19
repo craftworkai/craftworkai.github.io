@@ -1,0 +1,654 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><link rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v4.15.10"><title>Craftwork</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Oswald:wght@200..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="/assets/about.d7tg_F6b.css"></head><body class="min-h-screen flex flex-col justify-between"> <header class="bg-brand-blue text-brand-blue-medium-lite"> <div class="grid grid-cols-2 left-0 mx-auto max-w-7xl py-2"> <div class="flex items-center max-w-7xl"> <h1 class="font-bold font-roboto uppercase"> <a class="inline-block" href="/"><img alt="Craftwork" class="inline-block size-10" src="/images/logo.png"> Craftwork</a> </h1> </div> <div class="burger hidden sm:inline-block"> <div class="bar1 h-1 w-7 my-1.5 bg-brand-blue-medium-lite duration-300"></div> <div class="bar2 h-1 w-7 my-1.5 bg-brand-blue-medium-lite"></div> <div class="bar3 h-1 w-7 my-1.5 bg-brand-blue-medium-lite duration-300"></div> </div> <div class="max-w-7xl float-right place-content-end"> <div class="mx-auto float-end"> <nav> <ul class="links flex font-bold font-spacemono text-sm uppercase"> <li class="p-4"> <a class="hover:text-brand-gold hover:underline" href="/services"> Services </a> </li> <li class="p-4"> <a class="hover:text-brand-gold hover:underline" href="/industries"> Industries </a> </li> <li class="p-4"> <a class="hover:text-brand-gold hover:underline" href="/resources"> Resources </a> </li> <li class="p-4"> <a class="hover:text-brand-gold hover:underline" href="/articles"> Articles </a> </li> <li class="p-4"> <a class="hover:text-brand-gold hover:underline" href="/about"> About </a> </li> <li class="p-4 pr-0"> <a class="bg-brand-gold hover:bg-brand-blue-medium-lite font-bold px-3 py-2 rounded-md text-brand-blue" href="/contact"> Contact </a> </li> </ul> </nav> </div> </div> </div> </header> <main class="flex-grow">   <div class="max-w-4xl mx-auto"> <div class="py-12 sm:px-4"> <p class="mb-4"><a class="font-medium hover:text-gray-500 text-sm text-gray-400 uppercase" href="/articles">&laquo; Articles</a></p> <h2 class="font-playfair leading-normal mb-2 text-4xl text-brand-blue">Utilizing Kubernetes for an Effective MLOps Platform</h2> <p class="mb-8 text-gray-500 text-sm">07/16/2024 | Lark Mullins</p> <img class="mb-8 rounded-md" src="/images/articles/container-ship.jpg"> <article class="prose max-w-none"> <p>The rapid evolution of artificial intelligence (AI) and machine learning (ML) technologies has transformed numerous industries, offering unprecedented capabilities in data analysis, prediction, and automation. However, deploying AI/ML models in production environments remains a complex challenge. This is where MLOps (Machine Learning Operations) comes in, a practice that bridges the gap between data science and operations. As organizations embark on their AI/ML journeys, a critical decision emerges: should they build their own MLOps infrastructure or buy a pre-built solution? In this article, we explore the key considerations that can guide this decision.</p>
+<h2 id="understanding-mlops">Understanding MLOps</h2>
+<p>Machine learning operations (MLOps) is transforming the way organizations manage and deploy machine learning (ML) models. As the need for scalable and efficient ML workflows grows, Kubernetes has emerged as a powerful tool to streamline these processes. This article explores how to leverage Kubernetes to build a robust MLOps platform, enhancing your ML lifecycle management.</p>
+<h2 id="understanding-kubernetes-and-mlops">Understanding Kubernetes and MLOps</h2>
+<p>Kubernetes, an open-source container orchestration platform, automates the deployment, scaling, and management of containerized applications. It ensures that applications run consistently across different environments, which is crucial for ML workflows that often span development, testing, and production environments.</p>
+<p>MLOps integrates ML system development (Dev) and ML system operation (Ops). It focuses on automating and monitoring the entire ML lifecycle, from data preparation to model training, deployment, and monitoring.</p>
+<h2 id="benefits-of-kubernetes-in-mlops">Benefits of Kubernetes in MLOps</h2>
+<p>Kubernetes offers a wide array of benefits that make it an essential tool for modern application deployment and management. Its primary advantage lies in its ability to automate the deployment, scaling, and management of containerized applications, ensuring consistent performance across various environments. Kubernetes excels in scalability, allowing seamless horizontal and vertical scaling of applications to meet fluctuating demands efficiently. It provides robust resource management, optimizing the allocation and use of computing resources to handle intensive workloads effectively. Kubernetes also enhances portability, ensuring that applications run consistently in on-premises, cloud, or hybrid environments. With built-in features for automation, Kubernetes reduces manual intervention, minimizing errors and improving operational efficiency. Additionally, its capabilities in isolation and security enhance the safety and reliability of applications by isolating workloads and managing access controls. These comprehensive benefits make Kubernetes a powerful platform for organizations looking to streamline their application development and deployment processes.</p>
+<h3 id="scalability">Scalability</h3>
+<p>Kubernetes allows you to scale ML models and workloads seamlessly, offering dynamic and efficient resource management that is crucial for modern machine learning tasks. Here’s a deeper look at how Kubernetes achieves this:</p>
+<h4 id="horizontal-scaling">Horizontal Scaling</h4>
+<p>Kubernetes supports horizontal scaling, which means you can add more instances (pods) of your ML application as demand increases. This is particularly useful for handling sudden spikes in workload, such as during peak usage times or when processing large datasets. The Horizontal Pod Autoscaler (HPA) can automatically adjust the number of pods based on real-time metrics like CPU utilization, memory usage, or custom metrics, ensuring that your application remains responsive and performant under varying loads.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># HPA example</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> autoscaling/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> HorizontalPodAutoscaler
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model<span class="token punctuation">-</span>hpa
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+    <span class="token key atrule">scaleTargetRef</span><span class="token punctuation">:</span>
+        <span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> apps/v1
+        <span class="token key atrule">kind</span><span class="token punctuation">:</span> Deployment
+        <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model<span class="token punctuation">-</span>deployment
+    <span class="token key atrule">minReplicas</span><span class="token punctuation">:</span> <span class="token number">2</span>
+    <span class="token key atrule">maxReplicas</span><span class="token punctuation">:</span> <span class="token number">10</span>
+    <span class="token key atrule">targetCPUUtilizationPercentage</span><span class="token punctuation">:</span> <span class="token number">50</span>
+</code></pre>
+<h4 id="vertical-scaling">Vertical Scaling</h4>
+<p>In addition to horizontal scaling, Kubernetes also supports vertical scaling, allowing you to increase the resources (CPU, memory) allocated to a specific pod. This is beneficial for compute-intensive tasks, such as training complex models that require significant computational power. By adjusting resource requests and limits, Kubernetes can optimize the performance of your ML applications.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># Pod resource requests and limits</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Pod
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model<span class="token punctuation">-</span>pod
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+    <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model
+          <span class="token key atrule">image</span><span class="token punctuation">:</span> your<span class="token punctuation">-</span>docker<span class="token punctuation">-</span>image
+          <span class="token key atrule">resources</span><span class="token punctuation">:</span>
+              <span class="token key atrule">requests</span><span class="token punctuation">:</span>
+              <span class="token key atrule">memory</span><span class="token punctuation">:</span> <span class="token string">'2Gi'</span>
+              <span class="token key atrule">cpu</span><span class="token punctuation">:</span> <span class="token string">'1'</span>
+          <span class="token key atrule">limits</span><span class="token punctuation">:</span>
+              <span class="token key atrule">memory</span><span class="token punctuation">:</span> <span class="token string">'4Gi'</span>
+              <span class="token key atrule">cpu</span><span class="token punctuation">:</span> <span class="token string">'2'</span>
+</code></pre>
+<h4 id="cluster-autoscaler">Cluster Autoscaler</h4>
+<p>For environments where the workload can vary significantly, Kubernetes’ Cluster Autoscaler can dynamically adjust the size of the Kubernetes cluster itself by adding or removing nodes based on the current demand. This ensures that you only use (and pay for) the resources you need, providing cost-efficient scalability.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># Cluster Autoscaler configuration</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> autoscaling.k8s.io/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> ClusterAutoscaler
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> cluster<span class="token punctuation">-</span>autoscaler
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+    <span class="token key atrule">scaleDown</span><span class="token punctuation">:</span>
+        <span class="token key atrule">enabled</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
+        <span class="token key atrule">utilizationThreshold</span><span class="token punctuation">:</span> <span class="token number">0.5</span>
+    <span class="token key atrule">scaleUp</span><span class="token punctuation">:</span>
+        <span class="token key atrule">enabled</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
+        <span class="token key atrule">maxNodeProvisionTime</span><span class="token punctuation">:</span> 15m
+</code></pre>
+<h4 id="load-balancing">Load Balancing</h4>
+<p>Kubernetes provides built-in load balancing to distribute network traffic evenly across the different instances of your application. This not only improves performance but also ensures high availability and reliability of your ML services. Services and Ingress controllers in Kubernetes can be configured to handle incoming requests and route them appropriately to available pods.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># Load Balancer service example</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Service
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model<span class="token punctuation">-</span>service
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+    <span class="token key atrule">type</span><span class="token punctuation">:</span> LoadBalancer
+    <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+        <span class="token key atrule">app</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model
+    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">80</span>
+          <span class="token key atrule">targetPort</span><span class="token punctuation">:</span> <span class="token number">8080</span>
+</code></pre>
+<h4 id="job-and-cronjob-management">Job and CronJob Management</h4>
+<p>For batch processing and scheduled tasks, Kubernetes provides Job and CronJob resources. These resources allow you to define and manage batch jobs that run to completion and scheduled tasks that run at specified intervals, making it easy to handle data preprocessing, model training, and other periodic ML tasks.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># Job example</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> batch/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Job
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>training<span class="token punctuation">-</span>job
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">template</span><span class="token punctuation">:</span>
+    <span class="token key atrule">spec</span><span class="token punctuation">:</span>
+      <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>training
+        <span class="token key atrule">image</span><span class="token punctuation">:</span> your<span class="token punctuation">-</span>docker<span class="token punctuation">-</span>image
+        <span class="token key atrule">command</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">"python"</span><span class="token punctuation">,</span> <span class="token string">"train_model.py"</span><span class="token punctuation">]</span>
+      <span class="token key atrule">restartPolicy</span><span class="token punctuation">:</span> OnFailure
+
+<span class="token comment"># CronJob example</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> batch/v1beta1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> CronJob
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>daily<span class="token punctuation">-</span>training
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">schedule</span><span class="token punctuation">:</span> <span class="token string">"0 0 * * *"</span>
+  <span class="token key atrule">jobTemplate</span><span class="token punctuation">:</span>
+    <span class="token key atrule">spec</span><span class="token punctuation">:</span>
+      <span class="token key atrule">template</span><span class="token punctuation">:</span>
+        <span class="token key atrule">spec</span><span class="token punctuation">:</span>
+          <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+          <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>training
+            <span class="token key atrule">image</span><span class="token punctuation">:</span> your<span class="token punctuation">-</span>docker<span class="token punctuation">-</span>image
+            <span class="token key atrule">command</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">"python"</span><span class="token punctuation">,</span> <span class="token string">"train_model.py"</span><span class="token punctuation">]</span>
+          <span class="token key atrule">restartPolicy</span><span class="token punctuation">:</span> OnFailure
+</code></pre>
+<h4 id="resilience-and-fault-tolerance">Resilience and Fault Tolerance</h4>
+<p>Kubernetes enhances the resilience of your ML workloads by automatically managing the state of your applications. If a pod fails or a node goes down, Kubernetes will restart the pod or reschedule it on a different node, ensuring minimal disruption to your ML operations.</p>
+<p>By leveraging these scalability features of Kubernetes, organizations can handle large-scale ML workloads efficiently, ensuring that their machine learning models are always ready to meet the demands of production environments. This flexibility and robustness make Kubernetes an ideal choice for building a scalable and reliable MLOps platform.</p>
+<h3 id="portability">Portability</h3>
+<p>Kubernetes ensures that ML models and pipelines run consistently across various environments, whether on-premises, in the cloud, or in hybrid settings. This high level of portability is one of Kubernetes’ most significant advantages, providing the flexibility and freedom to deploy applications in the environment that best suits organizational needs without worrying about compatibility issues.</p>
+<h4 id="consistent-environment">Consistent Environment</h4>
+<p>Kubernetes standardizes the deployment environment through containerization. By packaging ML models and their dependencies into containers, Kubernetes ensures that the same environment is replicated across different platforms. This consistency eliminates the “it works on my machine” problem, ensuring that ML models and pipelines run the same way in development, testing, and production environments.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># Example Kubernetes Pod</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Pod
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model<span class="token punctuation">-</span>pod
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+    <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model
+          <span class="token key atrule">image</span><span class="token punctuation">:</span> your<span class="token punctuation">-</span>docker<span class="token punctuation">-</span>image
+          <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+              <span class="token punctuation">-</span> <span class="token key atrule">containerPort</span><span class="token punctuation">:</span> <span class="token number">8080</span>
+</code></pre>
+<h4 id="multi-cloud-and-hybrid-deployments">Multi-Cloud and Hybrid Deployments</h4>
+<p>Kubernetes supports deployments across multiple cloud providers, such as AWS, Google Cloud, and Azure, as well as on-premises and hybrid environments. This flexibility allows organizations to take advantage of different cloud services and pricing models, optimizing costs and performance. Kubernetes abstracts the underlying infrastructure, providing a unified deployment and management experience regardless of the environment.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># Kubernetes cluster setup across different environments</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Namespace
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> cloud<span class="token punctuation">-</span>env
+</code></pre>
+<h4 id="seamless-migration">Seamless Migration</h4>
+<p>Kubernetes simplifies the process of migrating ML models and applications between environments. Whether moving from on-premises to the cloud, from one cloud provider to another, or setting up a hybrid infrastructure, Kubernetes handles the underlying complexity. This seamless migration capability reduces downtime and the risks associated with moving workloads, ensuring business continuity.</p>
+<h4 id="vendor-agnosticism">Vendor Agnosticism</h4>
+<p>By using Kubernetes, organizations can avoid vendor lock-in. Kubernetes’ open-source nature and wide adoption mean that it is supported by most major cloud providers. This vendor-agnostic approach provides the flexibility to switch providers or use multiple providers simultaneously, optimizing costs and leveraging the best features of each platform.</p>
+<h4 id="development-and-operations-consistency">Development and Operations Consistency</h4>
+<p>Kubernetes provides a consistent interface and set of tools for developers and operations teams, regardless of the deployment environment. This consistency streamlines the development process, as teams can use the same tools and workflows across different stages of the ML lifecycle. Tools like <code>kubectl</code> and Helm charts work identically in all Kubernetes-supported environments, simplifying management and reducing learning curves.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># Helm chart example for consistent deployments</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> ConfigMap
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>config
+<span class="token key atrule">data</span><span class="token punctuation">:</span>
+    <span class="token key atrule">config.yaml</span><span class="token punctuation">:</span> <span class="token punctuation">|</span><span class="token scalar string">
+        replicas: 3
+        image:
+          repository: your-docker-image
+          tag: "latest"</span>
+</code></pre>
+<h4 id="edge-computing-support">Edge Computing Support</h4>
+<p>Kubernetes extends its portability to edge computing environments, enabling the deployment of ML models closer to where data is generated. This capability is crucial for applications that require low-latency processing, such as IoT and real-time analytics. By deploying Kubernetes at the edge, organizations can ensure consistent operations and leverage the same management and orchestration tools used in the cloud.</p>
+<h4 id="disaster-recovery-and-high-availability">Disaster Recovery and High Availability</h4>
+<p>Kubernetes’ portability also plays a crucial role in disaster recovery and high availability strategies. By deploying ML models across multiple regions and environments, organizations can ensure that their applications remain available even in the event of a regional outage. Kubernetes’ ability to automatically reschedule workloads on healthy nodes and its support for multi-region deployments enhance the resilience of ML applications.</p>
+<h3 id="automation">Automation</h3>
+<p>With Kubernetes, you can automate many aspects of your ML workflows, including deployment, scaling, and updates, significantly reducing manual intervention and errors. Automation is a core strength of Kubernetes, offering numerous features and tools that streamline operations and improve the efficiency and reliability of ML pipelines. Here’s an expanded look at how Kubernetes facilitates automation:</p>
+<h4 id="automated-deployment">Automated Deployment</h4>
+<p>Kubernetes automates the deployment of containerized applications, ensuring that your ML models and services are deployed consistently across different environments. Using Kubernetes Deployments, you can define the desired state of your application, and Kubernetes will handle the rest, ensuring that the specified number of replicas are running and managing rolling updates to minimize downtime.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># Kubernetes Deployment example</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> apps/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Deployment
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model<span class="token punctuation">-</span>deployment
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+    <span class="token key atrule">replicas</span><span class="token punctuation">:</span> <span class="token number">3</span>
+    <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+        <span class="token key atrule">matchLabels</span><span class="token punctuation">:</span>
+            <span class="token key atrule">app</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model
+    <span class="token key atrule">template</span><span class="token punctuation">:</span>
+        <span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+            <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+                <span class="token key atrule">app</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model
+        <span class="token key atrule">spec</span><span class="token punctuation">:</span>
+            <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+                <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model
+                  <span class="token key atrule">image</span><span class="token punctuation">:</span> your<span class="token punctuation">-</span>docker<span class="token punctuation">-</span>image
+                  <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+                      <span class="token punctuation">-</span> <span class="token key atrule">containerPort</span><span class="token punctuation">:</span> <span class="token number">8080</span>
+</code></pre>
+<h4 id="automated-scaling">Automated Scaling</h4>
+<p>Kubernetes’ Horizontal Pod Autoscaler (HPA) automates the scaling of applications based on resource utilization metrics such as CPU and memory usage. This ensures that your ML models can handle increased workloads without manual intervention, providing seamless scalability to meet demand.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># Horizontal Pod Autoscaler example</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> autoscaling/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> HorizontalPodAutoscaler
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model<span class="token punctuation">-</span>hpa
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+    <span class="token key atrule">scaleTargetRef</span><span class="token punctuation">:</span>
+        <span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> apps/v1
+        <span class="token key atrule">kind</span><span class="token punctuation">:</span> Deployment
+        <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model<span class="token punctuation">-</span>deployment
+    <span class="token key atrule">minReplicas</span><span class="token punctuation">:</span> <span class="token number">2</span>
+    <span class="token key atrule">maxReplicas</span><span class="token punctuation">:</span> <span class="token number">10</span>
+    <span class="token key atrule">targetCPUUtilizationPercentage</span><span class="token punctuation">:</span> <span class="token number">50</span>
+</code></pre>
+<h4 id="automated-updates">Automated Updates</h4>
+<p>Kubernetes facilitates automated updates and rollbacks, ensuring that your ML applications are always running the latest versions. By defining update strategies in your Deployment configurations, you can perform rolling updates that gradually replace old versions with new ones, minimizing downtime and mitigating the risk of failed deployments.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># Rolling update strategy example</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> apps/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Deployment
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model<span class="token punctuation">-</span>deployment
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">strategy</span><span class="token punctuation">:</span>
+    <span class="token key atrule">type</span><span class="token punctuation">:</span> RollingUpdate
+      <span class="token key atrule">rollingUpdate</span><span class="token punctuation">:</span>
+        <span class="token key atrule">maxUnavailable</span><span class="token punctuation">:</span> <span class="token number">1</span>
+        <span class="token key atrule">maxSurge</span><span class="token punctuation">:</span> <span class="token number">1</span>
+    <span class="token key atrule">replicas</span><span class="token punctuation">:</span> <span class="token number">3</span>
+    <span class="token key atrule">template</span><span class="token punctuation">:</span>
+      <span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+        <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+          <span class="token key atrule">app</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model
+      <span class="token key atrule">spec</span><span class="token punctuation">:</span>
+        <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model
+          <span class="token key atrule">image</span><span class="token punctuation">:</span> your<span class="token punctuation">-</span>docker<span class="token punctuation">-</span>image<span class="token punctuation">:</span>latest
+          <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+          <span class="token punctuation">-</span> <span class="token key atrule">containerPort</span><span class="token punctuation">:</span> <span class="token number">8080</span>
+</code></pre>
+<h4 id="automated-cicd-pipelines">Automated CI/CD Pipelines</h4>
+<p>Integrating Kubernetes with continuous integration and continuous deployment (CI/CD) tools like Jenkins, GitLab CI, or Argo CD automates the entire ML model lifecycle from code commit to deployment. This integration allows for automated building, testing, and deployment of ML models, ensuring quick and reliable delivery of updates and new features.</p>
+<h4 id="automated-resource-management">Automated Resource Management</h4>
+<p>Kubernetes automates resource management through its scheduler, which efficiently allocates resources to ensure optimal performance of ML workloads. The scheduler considers resource requests, constraints, and current cluster state to place pods on the most suitable nodes, maximizing resource utilization and minimizing conflicts.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># Resource requests and limits example</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Pod
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model<span class="token punctuation">-</span>pod
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+    <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model
+          <span class="token key atrule">image</span><span class="token punctuation">:</span> your<span class="token punctuation">-</span>docker<span class="token punctuation">-</span>image
+          <span class="token key atrule">resources</span><span class="token punctuation">:</span>
+              <span class="token key atrule">requests</span><span class="token punctuation">:</span>
+                  <span class="token key atrule">memory</span><span class="token punctuation">:</span> <span class="token string">'2Gi'</span>
+                  <span class="token key atrule">cpu</span><span class="token punctuation">:</span> <span class="token string">'1'</span>
+              <span class="token key atrule">limits</span><span class="token punctuation">:</span>
+                  <span class="token key atrule">memory</span><span class="token punctuation">:</span> <span class="token string">'4Gi'</span>
+                  <span class="token key atrule">cpu</span><span class="token punctuation">:</span> <span class="token string">'2'</span>
+</code></pre>
+<h4 id="automated-monitoring-and-alerting">Automated Monitoring and Alerting</h4>
+<p>Deploying monitoring tools like Prometheus and Grafana with Kubernetes enables automated monitoring and alerting. These tools can collect metrics from your ML models and infrastructure, automatically triggering alerts when predefined thresholds are breached. This automation helps in proactively identifying and resolving issues before they impact users.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># Prometheus alerting rule example</span>
+<span class="token key atrule">groups</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model<span class="token punctuation">-</span>alerts
+      <span class="token key atrule">rules</span><span class="token punctuation">:</span>
+          <span class="token punctuation">-</span> <span class="token key atrule">alert</span><span class="token punctuation">:</span> HighMemoryUsage
+            <span class="token key atrule">expr</span><span class="token punctuation">:</span> container_memory_usage_bytes<span class="token punctuation">{</span>container="ml<span class="token punctuation">-</span>model"<span class="token punctuation">}</span> <span class="token punctuation">></span> 2 * 1024 * 1024 * 1024
+            <span class="token key atrule">for</span><span class="token punctuation">:</span> 5m
+            <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+            <span class="token key atrule">severity</span><span class="token punctuation">:</span> critical
+            <span class="token key atrule">annotations</span><span class="token punctuation">:</span>
+                <span class="token key atrule">summary</span><span class="token punctuation">:</span> <span class="token string">'High memory usage detected for ML model'</span>
+                <span class="token key atrule">description</span><span class="token punctuation">:</span> <span class="token string">'Memory usage has exceeded 2GiB for more than 5 minutes.'</span>
+</code></pre>
+<h4 id="automated-log-management">Automated Log Management</h4>
+<p>Tools like the ELK stack (Elasticsearch, Logstash, Kibana) can be integrated with Kubernetes to automate log collection, aggregation, and analysis. This automation provides comprehensive insights into the behavior of your ML models, helping to troubleshoot issues and improve performance.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># Fluentd configuration for log management</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> ConfigMap
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> fluentd<span class="token punctuation">-</span>config
+<span class="token key atrule">data</span><span class="token punctuation">:</span>
+    <span class="token key atrule">fluentd.conf</span><span class="token punctuation">:</span> <span class="token punctuation">|</span><span class="token scalar string">
+        &#x3C;source>
+          @type forward
+          port 24224
+          bind 0.0.0.0
+        &#x3C;/source>
+        &#x3C;match **>
+          @type elasticsearch
+          host elasticsearch.default.svc.cluster.local
+          port 9200
+          logstash_format true
+          logstash_prefix fluentd
+          flush_interval 10s
+        &#x3C;/match></span>
+</code></pre>
+<h4 id="automated-disaster-recovery">Automated Disaster Recovery</h4>
+<p>Kubernetes facilitates automated disaster recovery processes. By using tools like Velero, you can automate backup and restore operations for your Kubernetes clusters. This automation ensures that your ML models and data are protected and can be quickly restored in case of failures, maintaining business continuity.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># Velero backup schedule example</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> velero.io/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Schedule
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> daily<span class="token punctuation">-</span>backup
+    <span class="token key atrule">namespace</span><span class="token punctuation">:</span> velero
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+    <span class="token key atrule">schedule</span><span class="token punctuation">:</span> <span class="token string">'0 2 * * *'</span>
+    <span class="token key atrule">template</span><span class="token punctuation">:</span>
+        <span class="token key atrule">includedNamespaces</span><span class="token punctuation">:</span>
+            <span class="token punctuation">-</span> <span class="token string">'*'</span>
+    <span class="token key atrule">ttl</span><span class="token punctuation">:</span> 720h0m0s
+</code></pre>
+<h3 id="isolation-and-security">Isolation and Security</h3>
+<p>Kubernetes isolates workloads, enhancing security and reducing the risk of interference between different models and workflows. This capability is crucial for maintaining the integrity and performance of machine learning (ML) applications, especially in environments where multiple models and data processes run concurrently. Here’s a deeper look into how Kubernetes provides robust isolation and security:</p>
+<h4 id="namespace-isolation">Namespace Isolation</h4>
+<p>Kubernetes namespaces provide a mechanism to isolate resources within a single cluster. By creating separate namespaces for different teams, projects, or stages of the ML pipeline (e.g., development, testing, production), you can ensure that resources are segregated, reducing the risk of accidental interference and improving organizational structure.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># Namespace example</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Namespace
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>development
+</code></pre>
+<h4 id="pod-security-policies-psps">Pod Security Policies (PSPs)</h4>
+<p>Kubernetes Pod Security Policies allow you to define security policies that govern the conditions under which pods can be created. PSPs can enforce rules such as running containers as non-root users, restricting the use of privileged containers, and controlling access to host resources, thus enhancing the security posture of your ML workloads.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># Pod Security Policy example</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> policy/v1beta1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> PodSecurityPolicy
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> restricted
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+    <span class="token key atrule">privileged</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>
+    <span class="token key atrule">runAsUser</span><span class="token punctuation">:</span>
+        <span class="token key atrule">rule</span><span class="token punctuation">:</span> <span class="token string">'MustRunAsNonRoot'</span>
+    <span class="token key atrule">seLinux</span><span class="token punctuation">:</span>
+        <span class="token key atrule">rule</span><span class="token punctuation">:</span> <span class="token string">'RunAsAny'</span>
+    <span class="token key atrule">fsGroup</span><span class="token punctuation">:</span>
+        <span class="token key atrule">rule</span><span class="token punctuation">:</span> <span class="token string">'MustRunAs'</span>
+        <span class="token key atrule">ranges</span><span class="token punctuation">:</span>
+            <span class="token punctuation">-</span> <span class="token key atrule">min</span><span class="token punctuation">:</span> <span class="token number">1</span>
+              <span class="token key atrule">max</span><span class="token punctuation">:</span> <span class="token number">65535</span>
+</code></pre>
+<h4 id="role-based-access-control-rbac">Role-Based Access Control (RBAC)</h4>
+<p>Kubernetes RBAC enables fine-grained access control by defining roles and binding them to users or service accounts. This allows you to control who can perform specific actions on Kubernetes resources, ensuring that only authorized personnel have access to sensitive ML models and data.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># RBAC example</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> rbac.authorization.k8s.io/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Role
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+    <span class="token key atrule">namespace</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>production
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>admin
+<span class="token key atrule">rules</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">apiGroups</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">''</span><span class="token punctuation">]</span>
+      <span class="token key atrule">resources</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'pods'</span><span class="token punctuation">,</span> <span class="token string">'services'</span><span class="token punctuation">]</span>
+      <span class="token key atrule">verbs</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'get'</span><span class="token punctuation">,</span> <span class="token string">'list'</span><span class="token punctuation">,</span> <span class="token string">'watch'</span><span class="token punctuation">,</span> <span class="token string">'create'</span><span class="token punctuation">,</span> <span class="token string">'update'</span><span class="token punctuation">,</span> <span class="token string">'delete'</span><span class="token punctuation">]</span>
+</code></pre>
+<h4 id="network-policies">Network Policies</h4>
+<p>Kubernetes network policies provide a way to control the traffic flow between pods. By defining network policies, you can enforce which pods can communicate with each other and with external endpoints, enhancing network security and minimizing the attack surface.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># Network Policy example</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> networking.k8s.io/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> NetworkPolicy
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> deny<span class="token punctuation">-</span>all
+    <span class="token key atrule">namespace</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>production
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+    <span class="token key atrule">podSelector</span><span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token key atrule">policyTypes</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> Ingress
+        <span class="token punctuation">-</span> Egress
+    <span class="token key atrule">ingress</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token key atrule">egress</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+</code></pre>
+<h4 id="service-mesh">Service Mesh</h4>
+<p>Integrating a service mesh like Istio with Kubernetes adds an extra layer of security and observability. A service mesh can enforce mutual TLS for pod-to-pod communication, provide fine-grained traffic control, and enable robust monitoring and tracing, ensuring secure and reliable interactions between different components of your ML applications.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># Istio example for mutual TLS</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> security.istio.io/v1beta1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> PeerAuthentication
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> default
+    <span class="token key atrule">namespace</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>production
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+    <span class="token key atrule">mtls</span><span class="token punctuation">:</span>
+        <span class="token key atrule">mode</span><span class="token punctuation">:</span> STRICT
+</code></pre>
+<h4 id="secrets-management">Secrets Management</h4>
+<p>Kubernetes provides built-in mechanisms for managing sensitive information, such as API keys, passwords, and certificates, through Kubernetes Secrets. Secrets are encrypted at rest and can be injected into pods securely, ensuring that sensitive information is protected and not hard-coded into application code.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># Kubernetes Secret example</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Secret
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>database<span class="token punctuation">-</span>secret
+    <span class="token key atrule">type</span><span class="token punctuation">:</span> Opaque
+    <span class="token key atrule">data</span><span class="token punctuation">:</span>
+      <span class="token key atrule">username</span><span class="token punctuation">:</span> YWRtaW4=  <span class="token comment"># base64 encoded value</span>
+      <span class="token key atrule">password</span><span class="token punctuation">:</span> cGFzc3dvcmQ=  <span class="token comment"># base64 encoded value</span>
+</code></pre>
+<h4 id="audit-logging">Audit Logging</h4>
+<p>Kubernetes provides audit logging capabilities to track and record user and system activity within the cluster. By configuring audit logs, you can monitor access and changes to your ML infrastructure, enabling you to detect and respond to suspicious activities promptly.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># Audit policy example</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> audit.k8s.io/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Policy
+<span class="token key atrule">rules</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">level</span><span class="token punctuation">:</span> Metadata
+      <span class="token key atrule">resources</span><span class="token punctuation">:</span>
+          <span class="token punctuation">-</span> <span class="token key atrule">group</span><span class="token punctuation">:</span> <span class="token string">''</span>
+            <span class="token key atrule">resources</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'pods'</span><span class="token punctuation">,</span> <span class="token string">'services'</span><span class="token punctuation">,</span> <span class="token string">'configmaps'</span><span class="token punctuation">]</span>
+            <span class="token key atrule">verbs</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'create'</span><span class="token punctuation">,</span> <span class="token string">'update'</span><span class="token punctuation">,</span> <span class="token string">'delete'</span><span class="token punctuation">]</span>
+</code></pre>
+<h4 id="workload-isolation">Workload Isolation</h4>
+<p>Kubernetes supports the use of node affinity and anti-affinity rules to isolate workloads. By defining these rules, you can control the placement of pods on specific nodes, ensuring that sensitive ML workloads are isolated from less trusted or resource-intensive applications.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># Pod affinity and anti-affinity example</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> apps/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Deployment
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model<span class="token punctuation">-</span>deployment
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+    <span class="token key atrule">replicas</span><span class="token punctuation">:</span> <span class="token number">3</span>
+    <span class="token key atrule">template</span><span class="token punctuation">:</span>
+        <span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+            <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+                <span class="token key atrule">app</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model
+        <span class="token key atrule">spec</span><span class="token punctuation">:</span>
+            <span class="token key atrule">affinity</span><span class="token punctuation">:</span>
+                <span class="token key atrule">nodeAffinity</span><span class="token punctuation">:</span>
+                    <span class="token key atrule">requiredDuringSchedulingIgnoredDuringExecution</span><span class="token punctuation">:</span>
+                        <span class="token key atrule">nodeSelectorTerms</span><span class="token punctuation">:</span>
+                            <span class="token punctuation">-</span> <span class="token key atrule">matchExpressions</span><span class="token punctuation">:</span>
+                                  <span class="token punctuation">-</span> <span class="token key atrule">key</span><span class="token punctuation">:</span> disktype
+                                    <span class="token key atrule">operator</span><span class="token punctuation">:</span> In
+                                    <span class="token key atrule">values</span><span class="token punctuation">:</span>
+                                        <span class="token punctuation">-</span> ssd
+</code></pre>
+<h4 id="security-contexts">Security Contexts</h4>
+<p>Kubernetes security contexts allow you to define security-related settings for pods and containers, such as running as a non-root user, setting file system permissions, and enabling privilege escalation controls. These settings help enforce security best practices and reduce the risk of container escapes and other security breaches.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># Security context example</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Pod
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> secure<span class="token punctuation">-</span>ml<span class="token punctuation">-</span>pod
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+    <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>container
+          <span class="token key atrule">image</span><span class="token punctuation">:</span> your<span class="token punctuation">-</span>docker<span class="token punctuation">-</span>image
+          <span class="token key atrule">securityContext</span><span class="token punctuation">:</span>
+              <span class="token key atrule">runAsUser</span><span class="token punctuation">:</span> <span class="token number">1000</span>
+              <span class="token key atrule">runAsGroup</span><span class="token punctuation">:</span> <span class="token number">3000</span>
+              <span class="token key atrule">fsGroup</span><span class="token punctuation">:</span> <span class="token number">2000</span>
+</code></pre>
+<h2 id="building-an-mlops-platform-with-kubernetes">Building an MLOps Platform with Kubernetes</h2>
+<h3 id="containerization">Containerization</h3>
+<p>The first step in leveraging Kubernetes for an MLOps platform is to containerize your machine learning (ML) applications using Docker. Containerization is a pivotal process that ensures your ML models, along with all their dependencies, are packaged together in a consistent and isolated environment. This packaging guarantees that your models can be easily ported across different environments and reproduced without compatibility issues.</p>
+<h3 id="containerization-with-docker">Containerization with Docker</h3>
+<h4 id="why-containerize">Why Containerize?</h4>
+<ol>
+<li>
+<p><strong>Portability</strong>: Docker containers encapsulate all the components your ML application needs to run, including libraries, dependencies, and configurations. This encapsulation ensures that your application can run seamlessly on any system that supports Docker, whether it’s a local machine, a cloud platform, or a high-performance computing cluster.</p>
+</li>
+<li>
+<p><strong>Reproducibility</strong>: By containerizing your ML workflows, you create a standardized environment that remains consistent across development, testing, and production stages. This consistency eliminates the “it works on my machine” problem, ensuring that your ML models produce the same results regardless of where they are deployed.</p>
+</li>
+<li>
+<p><strong>Scalability</strong>: Containers are lightweight and can be easily scaled up or down to meet demand. This scalability is essential for ML applications that may need to handle varying workloads, such as during model training or inference.</p>
+</li>
+</ol>
+<h4 id="steps-to-containerize-ml-applications">Steps to Containerize ML Applications</h4>
+<ol>
+<li>
+<p><strong>Create Docker Images</strong>: Begin by writing Dockerfiles for each component of your ML workflow. A Dockerfile is a script that contains a series of commands to build a Docker image. For instance, you can have separate Dockerfiles for data preprocessing, model training, and model inference.</p>
+<pre class="language-dockerfile" data-language="dockerfile"><code is:raw="" class="language-dockerfile"><span class="token comment"># Example Dockerfile for data preprocessing</span>
+<span class="token instruction"><span class="token keyword">FROM</span> python:3.8-slim</span>
+
+<span class="token instruction"><span class="token keyword">WORKDIR</span> /app</span>
+
+<span class="token instruction"><span class="token keyword">COPY</span> requirements.txt requirements.txt</span>
+<span class="token instruction"><span class="token keyword">RUN</span> pip install -r requirements.txt</span>
+
+<span class="token instruction"><span class="token keyword">COPY</span> . .</span>
+
+<span class="token instruction"><span class="token keyword">CMD</span> [<span class="token string">"python"</span>, <span class="token string">"preprocess.py"</span>]</span>
+</code></pre>
+</li>
+<li>
+<p><strong>Define Dependencies</strong>: Ensure that all necessary dependencies are included in your Docker images. This includes not just the ML libraries (e.g., TensorFlow, PyTorch) but also any data processing tools (e.g., Pandas, NumPy) and system dependencies.</p>
+</li>
+<li>
+<p><strong>Build and Test Images</strong>: After defining your Dockerfiles, build the Docker images using the Docker CLI. Test these images locally to verify that each component of your ML application works as expected within its containerized environment.</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash"><span class="token function">docker</span> build <span class="token parameter variable">-t</span> my-preprocess-image <span class="token builtin class-name">.</span>
+<span class="token function">docker</span> run <span class="token parameter variable">--rm</span> my-preprocess-image
+</code></pre>
+</li>
+<li>
+<p><strong>Store Images in a Registry</strong>: Push your Docker images to a container registry (e.g., Docker Hub, Amazon ECR, Google Container Registry) to make them accessible for deployment. Using a registry allows you to manage and distribute your container images efficiently.</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash"><span class="token function">docker</span> tag my-preprocess-image my-registry/my-preprocess-image:v1
+<span class="token function">docker</span> push my-registry/my-preprocess-image:v1
+</code></pre>
+</li>
+</ol>
+<h4 id="containerizing-different-ml-components">Containerizing Different ML Components</h4>
+<ul>
+<li>
+<p><strong>Data Preprocessing</strong>: Containerize your data preprocessing scripts to ensure that the same data cleaning, transformation, and feature engineering steps are applied consistently across different environments.</p>
+</li>
+<li>
+<p><strong>Model Training</strong>: Containerize your model training code to enable reproducible training runs. This is especially useful when training on different hardware (e.g., local GPUs, cloud-based TPUs).</p>
+</li>
+<li>
+<p><strong>Model Inference</strong>: Create Docker images for your inference services to deploy your trained models as scalable, reliable APIs or microservices.</p>
+</li>
+</ul>
+<h3 id="provisioning-a-kubernetes-cluster">Provisioning a Kubernetes Cluster</h3>
+<p>Provisioning a Kubernetes cluster is a critical step in setting up an MLOps platform, providing a scalable and resilient environment to run your containerized ML applications. Kubernetes automates the deployment, scaling, and management of containerized applications, making it an ideal choice for managing complex ML workflows.</p>
+<h4 id="choosing-your-infrastructure">Choosing Your Infrastructure</h4>
+<p>Kubernetes can be deployed on various types of infrastructure, depending on your organization’s needs and resources:</p>
+<ol>
+<li>
+<p><strong>On-Premises</strong>: For organizations with existing hardware and data security requirements, deploying Kubernetes on-premises can offer greater control over resources and compliance. Tools like kubeadm, kops, and Rancher can simplify the setup process for on-premises clusters.</p>
+</li>
+<li>
+<p><strong>Cloud</strong>: Cloud providers offer managed Kubernetes services that reduce the operational overhead of managing the control plane and nodes. Popular options include:</p>
+<ul>
+<li><strong>Google Kubernetes Engine (GKE)</strong>: GKE offers robust integration with Google’s cloud services, providing a seamless experience for deploying and managing Kubernetes clusters.</li>
+<li><strong>Amazon Elastic Kubernetes Service (EKS)</strong>: EKS simplifies Kubernetes deployment on AWS, leveraging AWS’s powerful infrastructure and services.</li>
+<li><strong>Azure Kubernetes Service (AKS)</strong>: AKS provides an easy-to-manage Kubernetes service with integrated CI/CD capabilities and enterprise-grade security.</li>
+</ul>
+</li>
+<li>
+<p><strong>Hybrid</strong>: A hybrid approach allows organizations to leverage both on-premises and cloud infrastructure, providing flexibility and scalability. This setup is ideal for workloads that require data locality alongside cloud scalability.</p>
+</li>
+</ol>
+<p>For this article we will focus on provisioning Kubernetes to AWS using their Elastic Kubernetes Service (EKS).</p>
+<h4 id="provisioning-your-eks-cluster">Provisioning Your EKS Cluster</h4>
+<ul>
+<li>
+<p><strong>Create an EKS Cluster</strong>: Use the AWS Management Console or AWS CLI to create an EKS cluster.</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">eksctl create cluster <span class="token parameter variable">--name</span> my-cluster <span class="token parameter variable">--region</span> us-east-1 --nodegroup-name my-nodes --node-type t3.medium <span class="token parameter variable">--nodes</span> <span class="token number">3</span>
+</code></pre>
+</li>
+<li>
+<p><strong>Configure kubectl</strong>: Update your kubeconfig file to access your EKS cluster.</p>
+<pre class="language-plaintext" data-language="plaintext"><code is:raw="" class="language-plaintext">```bash
+</code></pre>
+<p>aws eks update-kubeconfig —region us-east-1 —name my-cluster</p>
+</li>
+</ul>
+<pre class="language-plaintext" data-language="plaintext"><code is:raw="" class="language-plaintext">
+#### Interacting with Your Cluster Using kubectl
+
+`kubectl` is the command-line tool for interacting with your Kubernetes cluster. It allows you to deploy applications, manage cluster resources, and view logs and events. Here are some common `kubectl` commands:
+
+- **Deploy an Application**: Use a YAML file to define your application and deploy it to the cluster.
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: my-app
+spec:
+    replicas: 3
+    selector:
+        matchLabels:
+            app: my-app
+    template:
+        metadata:
+            labels:
+                app: my-app
+        spec:
+            containers:
+            - name: my-app
+              image: my-app-image
+              ports:
+              - containerPort: 80
+</code></pre>
+<p>Deploy using <code>kubectl</code>:</p>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">kubectl apply <span class="token parameter variable">-f</span> my-app-deployment.yaml
+</code></pre>
+<ul>
+<li><strong>Scale Applications</strong>: Adjust the number of replicas to scale your application up or down.</li>
+</ul>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">kubectl scale deployment my-app <span class="token parameter variable">--replicas</span><span class="token operator">=</span><span class="token number">5</span>
+</code></pre>
+<ul>
+<li><strong>Monitor Resources</strong>: Check the status and health of your deployments and pods.</li>
+</ul>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">kubectl get deployments
+kubectl get pods
+</code></pre>
+<ul>
+<li><strong>View Logs</strong>: Access logs to troubleshoot and monitor application behavior.</li>
+</ul>
+<pre class="language-bash" data-language="bash"><code is:raw="" class="language-bash">kubectl logs <span class="token operator">&#x3C;</span>pod-name<span class="token operator">></span>
+</code></pre>
+<h3 id="defining-kubernetes-resources">Defining Kubernetes Resources</h3>
+<p>Define Kubernetes resources such as Pods, Services, and Deployments for your ML applications. Pods encapsulate your containerized applications, while Services expose them to the network. Deployments manage the lifecycle of your applications, ensuring they run as expected.</p>
+<p>Here’s an example of a Kubernetes Deployment for an ML model:</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> apps/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Deployment
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model<span class="token punctuation">-</span>deployment
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+    <span class="token key atrule">replicas</span><span class="token punctuation">:</span> <span class="token number">3</span>
+    <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+        <span class="token key atrule">matchLabels</span><span class="token punctuation">:</span>
+            <span class="token key atrule">app</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model
+    <span class="token key atrule">template</span><span class="token punctuation">:</span>
+        <span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+            <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+                <span class="token key atrule">app</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model
+        <span class="token key atrule">spec</span><span class="token punctuation">:</span>
+            <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+                <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model
+                  <span class="token key atrule">image</span><span class="token punctuation">:</span> your<span class="token punctuation">-</span>docker<span class="token punctuation">-</span>image
+                  <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+                      <span class="token punctuation">-</span> <span class="token key atrule">containerPort</span><span class="token punctuation">:</span> <span class="token number">8080</span>
+</code></pre>
+<h3 id="automating-workflows-with-cicd">Automating Workflows with CI/CD</h3>
+<p>Implement CI/CD pipelines to automate the building, testing, and deployment of your ML models. Tools like Jenkins, GitLab CI, or Argo CD can be integrated with Kubernetes to streamline these processes. Use Helm charts to manage your Kubernetes configurations and deployments.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># Example Helm Chart values.yaml</span>
+<span class="token key atrule">replicaCount</span><span class="token punctuation">:</span> <span class="token number">3</span>
+<span class="token key atrule">image</span><span class="token punctuation">:</span>
+    <span class="token key atrule">repository</span><span class="token punctuation">:</span> your<span class="token punctuation">-</span>docker<span class="token punctuation">-</span>image
+    <span class="token key atrule">pullPolicy</span><span class="token punctuation">:</span> IfNotPresent
+    <span class="token key atrule">tag</span><span class="token punctuation">:</span> <span class="token string">'latest'</span>
+<span class="token key atrule">service</span><span class="token punctuation">:</span>
+    <span class="token key atrule">type</span><span class="token punctuation">:</span> ClusterIP
+    <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">8080</span>
+</code></pre>
+<h3 id="monitoring-and-logging">Monitoring and Logging</h3>
+<p>Deploy monitoring and logging solutions to track the performance and health of your ML models and infrastructure. Tools like Prometheus, Grafana, and the ELK stack (Elasticsearch, Logstash, Kibana) can provide insights into model performance, resource utilization, and anomalies.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># Prometheus deployment example</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> monitoring.coreos.com/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Prometheus
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> prometheus
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+    <span class="token key atrule">replicas</span><span class="token punctuation">:</span> <span class="token number">2</span>
+    <span class="token key atrule">serviceAccountName</span><span class="token punctuation">:</span> prometheus
+    <span class="token key atrule">serviceMonitorSelector</span><span class="token punctuation">:</span>
+        <span class="token key atrule">matchLabels</span><span class="token punctuation">:</span>
+            <span class="token key atrule">team</span><span class="token punctuation">:</span> frontend
+</code></pre>
+<h3 id="scaling-and-load-balancing">Scaling and Load Balancing</h3>
+<p>Kubernetes’ Horizontal Pod Autoscaler (HPA) can automatically scale your ML applications based on metrics like CPU and memory usage. Additionally, use Kubernetes’ built-in load balancing to distribute traffic across multiple instances of your ML models.</p>
+<pre class="language-yaml" data-language="yaml"><code is:raw="" class="language-yaml"><span class="token comment"># HPA example</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> autoscaling/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> HorizontalPodAutoscaler
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model<span class="token punctuation">-</span>hpa
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+    <span class="token key atrule">scaleTargetRef</span><span class="token punctuation">:</span>
+        <span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> apps/v1
+        <span class="token key atrule">kind</span><span class="token punctuation">:</span> Deployment
+        <span class="token key atrule">name</span><span class="token punctuation">:</span> ml<span class="token punctuation">-</span>model<span class="token punctuation">-</span>deployment
+    <span class="token key atrule">minReplicas</span><span class="token punctuation">:</span> <span class="token number">1</span>
+    <span class="token key atrule">maxReplicas</span><span class="token punctuation">:</span> <span class="token number">10</span>
+    <span class="token key atrule">targetCPUUtilizationPercentage</span><span class="token punctuation">:</span> <span class="token number">50</span>
+</code></pre>
+<h2 id="real-world-use-cases">Real-World Use Cases</h2>
+<h3 id="spotify">Spotify</h3>
+<p>Spotify uses Kubernetes to manage its ML workflows, ensuring scalable and reliable music recommendations.</p>
+<h3 id="airbnb">Airbnb</h3>
+<p>Airbnb leverages Kubernetes for deploying and managing its ML models that power personalized search and recommendations.</p>
+<h3 id="uber">Uber</h3>
+<p>Uber utilizes Kubernetes to scale its ML models for predicting ETAs and optimizing routes.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Kubernetes offers a robust and flexible foundation for building an MLOps platform. By leveraging its scalability, portability, and automation capabilities, organizations can enhance their ML lifecycle management, ensuring efficient deployment and operation of ML models. As MLOps continues to evolve, Kubernetes will undoubtedly play a pivotal role in driving the next wave of ML innovation.</p>
+<p>By following these steps and leveraging the power of Kubernetes, you will get a good understanding of how to leverage Kubernetes for your machine learning workflow.</p> </article> </div> </div> <div class="py-12 bg-brand-blue-lite bg-center bg-auto"> <div class="max-w-4xl mx-auto text-center"> <h3 class="font-playfair font-medium mb-2 text-3xl text-brand-blue">Sign Up for Fieldcraft</h3> <p class="mb-6 text-gray-500">Fieldcraft is Craftwork's weekly newsletter providing industry insights and exclusive updates.</p> </div> <div class="max-w-4xl mx-auto"> <div class="px-48 sm:px-4"> <iframe src="https://embeds.beehiiv.com/c35a0a91-7cb4-49a4-a702-820c008eea27?slim=true" data-test-id="beehiiv-embed" height="52" class="w-full" frameborder="0" scrolling="no" style="margin: 0; border-radius: 0px !important; background-color: transparent;"></iframe> </div> <!-- <form>
+            <div class="flex flex-row justify-center">
+                <input class="mt-1 block w-1/2 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400" placeholder="Email" type="email" />
+                <button class="bg-brand-blue hover:bg-brand-blue-medium-lite font-roboto hover:text-brand-blue px-3 py-2 rounded-md text-brand-gold" id="submitButton" type="submit">Sign Up</button>
+            </div>
+        </form> --> </div> </div>   </main> <footer class="py-12 bg-brand-blue bg-center bg-auto font-roboto text-brand-blue-medium-lite"> <div class="max-w-4xl mx-auto"> <div class="grid grid-cols-2 gap-16 sm:grid-cols-1 sm:gap-4"> <div class="sm:block sm:text-center"> <p>&copy; 2024 Craftwork Systems, LLC</p> </div> <div class="text-right sm:content-evenly sm:text-center"> <a class="inline-block mr-1" href="https://linkedin.com/company/craftworkai" target="_blank"> <svg class="fill-brand-blue-medium-lite hover:fill-brand-gold" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 50 50"> <path d="M41,4H9C6.24,4,4,6.24,4,9v32c0,2.76,2.24,5,5,5h32c2.76,0,5-2.24,5-5V9C46,6.24,43.76,4,41,4z M17,20v19h-6V20H17z M11,14.47c0-1.4,1.2-2.47,3-2.47s2.93,1.07,3,2.47c0,1.4-1.12,2.53-3,2.53C12.2,17,11,15.87,11,14.47z M39,39h-6c0,0,0-9.26,0-10 c0-2-1-4-3.5-4.04h-0.08C27,24.96,26,27.02,26,29c0,0.91,0,10,0,10h-6V20h6v2.56c0,0,1.93-2.56,5.81-2.56 c3.97,0,7.19,2.73,7.19,8.26V39z"></path> </svg> </a> <a class="inline-block mr-1" href="https://x.com/craftworkai" target="_blank"> <svg class="fill-brand-blue-medium-lite hover:fill-brand-gold" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 50 50"> <path d="M 11 4 C 7.134 4 4 7.134 4 11 L 4 39 C 4 42.866 7.134 46 11 46 L 39 46 C 42.866 46 46 42.866 46 39 L 46 11 C 46 7.134 42.866 4 39 4 L 11 4 z M 13.085938 13 L 21.023438 13 L 26.660156 21.009766 L 33.5 13 L 36 13 L 27.789062 22.613281 L 37.914062 37 L 29.978516 37 L 23.4375 27.707031 L 15.5 37 L 13 37 L 22.308594 26.103516 L 13.085938 13 z M 16.914062 15 L 31.021484 35 L 34.085938 35 L 19.978516 15 L 16.914062 15 z"></path> </svg> </a> <a class="inline-block mr-1" href="https://www.instagram.com/craftworkai/" target="_blank"> <svg class="fill-brand-blue-medium-lite hover:fill-brand-gold" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 50 50"> <path d="M 16 3 C 8.83 3 3 8.83 3 16 L 3 34 C 3 41.17 8.83 47 16 47 L 34 47 C 41.17 47 47 41.17 47 34 L 47 16 C 47 8.83 41.17 3 34 3 L 16 3 z M 37 11 C 38.1 11 39 11.9 39 13 C 39 14.1 38.1 15 37 15 C 35.9 15 35 14.1 35 13 C 35 11.9 35.9 11 37 11 z M 25 14 C 31.07 14 36 18.93 36 25 C 36 31.07 31.07 36 25 36 C 18.93 36 14 31.07 14 25 C 14 18.93 18.93 14 25 14 z M 25 16 C 20.04 16 16 20.04 16 25 C 16 29.96 20.04 34 25 34 C 29.96 34 34 29.96 34 25 C 34 20.04 29.96 16 25 16 z"></path> </svg> </a> <a class="inline-block mr-1" href="https://www.facebook.com/profile.php?id=61556705353308" target="_blank"> <svg class="fill-brand-blue-medium-lite hover:fill-brand-gold" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 50 50"> <path d="M41,4H9C6.24,4,4,6.24,4,9v32c0,2.76,2.24,5,5,5h32c2.76,0,5-2.24,5-5V9C46,6.24,43.76,4,41,4z M37,19h-2c-2.14,0-3,0.5-3,2 v3h5l-1,5h-4v15h-5V29h-4v-5h4v-3c0-4,2-7,6-7c2.9,0,4,1,4,1V19z"></path> </svg> </a> </div> </div> </div> </footer> </body></html>
